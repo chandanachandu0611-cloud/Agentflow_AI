@@ -125,9 +125,8 @@ node scratch/test_seed_verification.js
 ```
 ## 📺 Demo Video
 
-- 🔗 **Watch Demo:** [Click here to view the project walkthrough](https://youtube.com/shorts/hBWNaZfKX8E?feature=share)
+- 🔗 **Watch Demo:** [Click here to view the project walkthrough](https://youtu.be/9-m-kCMi7m0?si=oARg3wJdu930wxWe)
 
----
 ---
 
 ## 📄 License
