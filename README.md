@@ -123,7 +123,11 @@ node scratch/test_phase5_e2e.js
 # Verify Persistent Seed Data & Auto-Login
 node scratch/test_seed_verification.js
 ```
+## 📺 Demo Video
 
+- 🔗 **Watch Demo:** [Click here to view the project walkthrough](https://youtube.com/shorts/hBWNaZfKX8E?feature=share)
+
+---
 ---
 
 ## 📄 License
