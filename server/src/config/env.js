@@ -15,5 +15,6 @@ module.exports = {
   openRouterApiKey: process.env.OPENROUTER_API_KEY || '',
   geminiApiKey: process.env.GEMINI_API_KEY || '',
   emailUser: process.env.EMAIL_USER || '',
-  emailPass: process.env.EMAIL_PASS || ''
+  emailPass: process.env.EMAIL_PASS || '',
+  resendApiKey: process.env.RESEND_API_KEY || ''
 };

@@ -31,6 +31,55 @@ class EmailService {
     const subject = this.parseTemplate(rawSubject, context);
     const bodyText = this.parseTemplate(rawBodyText, context);
 
+    const resendApiKey = process.env.RESEND_API_KEY || env.resendApiKey;
+    if (resendApiKey && resendApiKey.trim() !== '') {
+      try {
+        const response = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${resendApiKey.trim()}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            from: process.env.RESEND_FROM_EMAIL || 'Agentflow AI <onboarding@resend.dev>',
+            to: Array.isArray(recipient) ? recipient : [recipient],
+            subject: subject || 'Agentflow Notification',
+            text: bodyText || 'Execution finished successfully.',
+            html: `<div style="font-family: sans-serif; padding: 24px; background: #0a0d14; color: #f8fafc; border-radius: 16px;">
+              <h2 style="color: #6366f1; margin-top: 0;">⚡ Agentflow_AI Execution Notice</h2>
+              <p style="font-size: 14px;"><strong>Recipient:</strong> ${recipient}</p>
+              <p style="font-size: 14px;"><strong>Subject:</strong> ${subject}</p>
+              <hr style="border: 0; border-top: 1px solid #1e293b; margin: 16px 0;" />
+              <div style="background: #121723; padding: 16px; border-radius: 12px; font-family: monospace; font-size: 13px; color: #e2e8f0; white-space: pre-wrap;">${bodyText}</div>
+              <p style="font-size: 11px; color: #64748b; margin-top: 20px;">Automated delivery powered by Agentflow_AI Engine via Resend.</p>
+            </div>`
+          })
+        });
+
+        const data = await response.json();
+        console.log('[Resend API Response]:', data);
+
+        if (response.ok) {
+          return {
+            success: true,
+            status: 'success',
+            delivered: true,
+            simulated: false,
+            method: 'Resend REST API',
+            recipient,
+            subject,
+            parsedBody: bodyText,
+            resendData: data,
+            deliveredAt: new Date().toISOString()
+          };
+        } else {
+          console.warn(`[Resend API Warning]: ${JSON.stringify(data)}. Bypassing to fallback transporter.`);
+        }
+      } catch (err) {
+        console.log(`[EmailService] Resend dispatch error (${err.message}). Bypassing to fallback transporter.`);
+      }
+    }
+
     const emailUser = process.env.EMAIL_USER || process.env.EMAIL || env.emailUser;
     const emailPass = process.env.EMAIL_PASS || process.env.EMAIL_PASSWORD || env.emailPass;
 
