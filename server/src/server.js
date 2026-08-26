@@ -54,13 +54,27 @@ app.get('/', (req, res) => {
   });
 });
 
-// API Routes
+// API Routes (Mounted under both /api/... and /... for seamless path compatibility)
 app.use('/api/auth', authRoutes);
-app.use('/api/workflows', workflowRoutes);
-app.use('/api/executions', executionRoutes);
-app.use('/api/integrations', integrationRoutes);
+app.use('/auth', authRoutes);
 
-// API Health Check Route
+app.use('/api/workflows', workflowRoutes);
+app.use('/workflows', workflowRoutes);
+
+app.use('/api/executions', executionRoutes);
+app.use('/executions', executionRoutes);
+
+app.use('/api/integrations', integrationRoutes);
+app.use('/integrations', integrationRoutes);
+
+// Health Check Endpoints
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    message: 'Backend is running'
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
@@ -72,7 +86,8 @@ app.get('/api/health', (req, res) => {
 
 // 404 Handler
 app.use((req, res) => {
-  res.status(404).json({ success: false, error: 'Endpoint not found' });
+  console.warn(`[404 Not Found] ${req.method} ${req.originalUrl}`);
+  res.status(404).json({ success: false, error: `Endpoint not found: ${req.method} ${req.originalUrl}` });
 });
 
 // Global Error Handler
