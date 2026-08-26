@@ -4,10 +4,22 @@ const env = require('./env');
 let io = null;
 
 const initSocket = (server) => {
+  const allowedOrigins = [
+    'https://agentflow-ai-gold.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5000',
+    env.clientUrl
+  ].filter(Boolean);
+
   io = new Server(server, {
     cors: {
-      origin: env.clientUrl,
-      methods: ['GET', 'POST'],
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+          return callback(null, true);
+        }
+        return callback(null, origin);
+      },
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       credentials: true
     }
   });

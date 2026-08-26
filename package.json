@@ -1,0 +1,12 @@
+{
+  "name": "agentflow-ai",
+  "version": "1.0.0",
+  "description": "Agentflow_AI Operations Automation Platform",
+  "main": "server/src/server.js",
+  "scripts": {
+    "start": "node server/src/server.js",
+    "dev": "cd server && npm run dev",
+    "build": "cd server && npm install"
+  },
+  "private": true
+}
